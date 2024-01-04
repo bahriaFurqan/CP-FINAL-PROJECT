@@ -1,0 +1,2377 @@
+#include <iostream>
+#include <string>
+#include <ctime>
+#include <cstdlib>
+using namespace std;
+
+struct {
+	string name;
+	string CLASS;
+	int  health_points = 100;
+	int experience_points = 0;
+} character;
+
+struct
+{
+    int i;
+    int option,option_for_weapon;
+    int gameover = 0;
+    int gameover1 = 0;
+    int noupgrade = 0;
+    int noupgrade1 = 0;
+}OPT;
+struct Options {
+    int option;
+    int heroOpt, villainOpt;
+   
+
+};
+
+struct Inventory {
+	string item1;
+	string item2;
+};
+Inventory warriorInventory = { "Titanic War Axe", "Nanite-Infused Armor" };
+Inventory mageInventory = { "Arcane Focus Staff", "Chrono-Amulet" };
+Inventory rogueInventory = { "Shadowblade Daggers", "Cloak of Elusiveness" };
+void displayInventory(Inventory& inv)
+{
+	cout << "Inventory:" << endl;
+	cout << "1. " << inv.item1 << endl;
+	cout << "2. " << inv.item2 << endl << endl;
+}
+void CHARACTER_CREATION()
+{
+	cout << "Choose a character:" << endl;
+	cout << "Enter the name of the character:";
+	cin >> character.name;
+	cout << endl;
+	for (;;)
+	{
+		
+		cout << "Choose a class of the character:" << endl;
+		cout << "Press 1 to select 'Warrior'. \n";
+		cout << "Press 2 to select 'Mage'.\n";
+		cout << "Press 3 to select 'Rogue'. \n";
+		cin >> OPT.i;
+		if (OPT.i == 1)
+		{
+			character.CLASS = " Warrior ";
+			cout << "In 2126, a warrior flees the cybernetic rule of the $UPERIOR$, finding sanctuary in a jungle.\nEmbracing ancient combat and blending tradition with innovation, \nhe becomes a symbol of resistance.Armed with a rare metal weapon, \nhe decided to wage war against the SUPERIORS, \nmarking the dawn of a new era for humanity." << endl;
+			break;
+		}
+		else if (OPT.i == 2)
+		{
+			character.CLASS = " Mage ";
+			cout << "In 2126, a rebellious librarian defies SUPERIORS, leaving with ancient tomes. \nEmbracing the mage's role, they join rebels alongside \nthe warrior, battling machines to restore harmony. \nClad in enchanted robes, wielding a crackling staff, \nthe librarian stands united against machinery, \na beacon of hope in the fight for liberation." << endl;
+		
+			break;
+		}
+
+		else if (OPT.i == 3)
+		{
+			character.CLASS = " Rogue ";
+			break;
+		}
+		else
+		{
+			cin.clear();
+			cin.ignore();
+			cout << "Invalid choice. Please enter 1, 2, or 3." << endl;
+			continue;
+		}
+	}
+}
+void weapondisplay()
+{
+	displayInventory((character.CLASS == " Warrior ") ? warriorInventory : ((character.CLASS == " Mage ") ? mageInventory : rogueInventory));
+	cout << "Select an Item (1 or 2): ";
+	cin >> OPT.option_for_weapon;
+	cout << endl;
+}
+void CHARACTERINFO()
+{
+	cout << "Player's character information: " << endl;
+	cout << "Your name is: " << character.name << endl;
+	cout << "Your class is: " << character.CLASS << endl;
+	cout << "Health points: " << character.health_points << endl;
+	cout << "Experience points: " << character.experience_points << endl << endl;
+}
+void start_the_game()
+{
+    for (;;)
+    {
+
+        cout << "Choose an option:\n";
+        cout << "1-Start the game.\n";
+        cout << "2-Inventory\n";
+        cout << "3-End Game.\n";
+       
+        cin >> OPT.option;
+        cout << endl;
+        if (OPT.option ==1)
+        {
+            break;
+        }
+        else if (OPT.option == 2)
+        {
+            break;
+        }
+        else if (OPT.option == 3)
+        {
+            break;
+        }
+        else
+        {
+            cin.clear();
+            cin.ignore();
+            cout << "Invalid choice. Please enter 1, 2, or 3." << endl;
+            continue;
+        }
+
+    }
+}
+void warrior_level_1()
+{
+    
+    // Initialize options for hero/villain
+    Options heroOpt, villainOpt;
+
+    // Seed for random number generation
+    srand(static_cast<unsigned int>(time(0)));
+
+    // Initialize hero and villain health
+    int heroHealth = 100;
+    int villainHealth = 100;
+
+    // Counter for hero and villain damage dealt or received
+    int heroDamageCounter = 0;
+    int villainDamageCounter = 0;
+
+    // Flag to check if special abilities are unlocked
+    bool heroSpecialUnlocked = false;
+    bool villainSpecialUnlocked = false;
+
+    // Main quest loop
+    while (true) {
+        // Hero's turn
+        heroOpt.option = rand() % 5 + 1; // Randomly choose an option for the hero
+        cout << "\n============================\n";
+        cout << endl << endl;
+
+        cout << "Press Enter to continue..."<<endl;
+        cin.get();
+        if (heroOpt.option == 5 && heroDamageCounter >= 4) {
+            // Unlock and use the special ability
+            heroSpecialUnlocked = true;
+            heroDamageCounter = 0; // Reset the counter
+            villainHealth -= 7; // Deal 7 points of damage to the villain
+            cout << "Hero uses Warrior's Valor! Deals a powerful blow to the villain.\n";
+            character.experience_points = character.experience_points + 4;
+        }
+       
+        else {
+            // Use a regular attack
+            switch (heroOpt.option) {
+            case 1:
+                villainHealth -= 6; // Mighty Strike
+                cout << "Hero uses Mighty Strike. Deals 6 points of damage to the villain.\n";
+                character.experience_points = character.experience_points + 4;
+                break;
+            case 2:
+                // Shield Block reduces received damage by 2
+                villainHealth -= (villainOpt.option == 3) ? 0 : 2;
+                std::cout << "Hero uses Shield Block. Reduces incoming damage.\n";
+                character.experience_points = character.experience_points + 3;
+                heroHealth = heroHealth + 2;
+                break;
+            case 3:
+                villainOpt.option -= 1; // Battle Roar reduces villain's attack
+                cout << "Hero uses Battle Roar. Reduces villain's attack.\n";
+                character.experience_points = character.experience_points + 4;
+                break;
+            case 4:
+                // Defensive Stance reduces received damage by 3
+                villainHealth -= (villainOpt.option == 6) ? 0 : 3;
+                cout << "Hero uses Defensive Stance. Reduces incoming damage.\n";
+                character.experience_points = character.experience_points + 5;
+                break;
+            default:
+                villainHealth -= 5; // Counter Slash
+                cout << "Hero uses Counter Slash. Deals 5 points of damage to the villain.\n";
+                character.experience_points = character.experience_points + 3;
+                break;
+            }
+        }
+        // Check if villain is defeated
+        if (villainHealth <= 0) {
+            std::cout << "Hero defeats the villain! Congratulations!\n";
+            break;
+        }
+
+        cout << "\n============================\n";
+        cout << endl << endl;
+       
+        cout << "Press Enter to continue...";
+        cin.get();
+        // Villain's turn
+        villainOpt.option = rand() % 7 + 1; // Randomly choose an option for the villain
+
+        if (villainOpt.option == 7 && villainDamageCounter >= 4) {
+            // Unlock and use the special ability
+            villainSpecialUnlocked = true;
+            villainDamageCounter = 0; // Reset the counter
+            heroHealth -= 8; // Deal 8 points of damage to the hero
+           cout << "Villain uses Cybernetic Overload! Deals a massive blow to the hero.\n";
+        }
+        else {
+            // Use a regular attack
+            switch (villainOpt.option) {
+            case 1:
+                heroHealth -= 3; // Electric Surge
+                cout << "Villain uses Electric Surge. Deals 3 points of damage to the hero.\n";
+                break;
+            case 2:
+                heroHealth -= 4; // Toxic Spit
+                cout << "Villain uses Toxic Spit. Deals 4 points of damage to the hero.\n";
+                break;
+            case 3:
+                heroHealth -= 5; // Mechanical Slam
+                cout << "Villain uses Mechanical Slam. Deals 5 points of damage to the hero.\n";
+                break;
+            case 4:
+                heroOpt.option -= 1; // Disruptor Beam reduces hero's accuracy
+                cout << "Villain uses Disruptor Beam. Temporarily disrupts hero's accuracy.\n";
+                break;
+            case 5:
+                heroHealth -= 3; // Nano Swarm
+                cout << "Villain uses Nano Swarm. Deals 3 points of damage to the hero.\n";
+                break;
+            case 6:
+                heroOpt.option -= 2; // Energy Pulse reduces hero's defenses
+                cout << "Villain uses Energy Pulse. Weakens hero's defenses.\n";
+                break;
+            default:
+                heroDamageCounter = 0; // Defensive Matrix reduces damage received by 2
+                cout << "Villain uses Defensive Matrix. Reduces incoming damage.\n";
+                villainHealth =villainHealth+ 2;
+                break;
+            }
+        }
+
+        // Check if hero is defeated
+        if (heroHealth <= 0) {
+            cout << "Hero is defeated! Game over.\n";
+             OPT.gameover =1;
+            break;
+        }
+
+        
+
+        // Increment damage counters
+        heroDamageCounter++;
+        villainDamageCounter++;
+
+        // Display health status
+        cout << endl;
+        cout << "Hero's Health: " << heroHealth << " | Villain's Health: " << villainHealth << " | Experrience points: " << character.experience_points<<endl;
+
+        // Check if special abilities are unlocked and reset the counters
+        if (heroSpecialUnlocked) {
+            heroSpecialUnlocked = false;
+            heroDamageCounter = 0;
+        }
+
+        if (villainSpecialUnlocked) {
+            villainSpecialUnlocked = false;
+            villainDamageCounter = 0;
+        }
+    }
+
+}
+
+void heroupgrade()
+{
+    cout << "Do you want to upgrade your hero's abilities using experience points? (y/n): ";
+    char upgradeChoice;
+    cin >> upgradeChoice;
+
+    if (upgradeChoice == 'y' || upgradeChoice == 'Y')
+    {
+        int upgradeCost = 100;
+
+        // Display current abilities and prompt user for upgrade
+        cout << "\nCurrent Hero Abilities:\n";
+        cout << "1. Mighty Strike\n";
+        cout << "2. Shield Block\n";
+        cout << "3. Battle Roar\n";
+        cout << "4. Defensive Stance\n";
+        cout << "5. Counter Slash\n";
+       
+            // Deduct experience points and upgrade the chosen ability
+             // Adjust the cost as needed
+            if (character.experience_points >= upgradeCost)
+            {
+                character.experience_points -= upgradeCost;
+             cout << "Hero upgrades ability " << ".\n";
+             cout << "Mighty Strike upgraded!\n";
+              cout << "Shield Block upgraded!\n";
+             cout << "Battle Roar upgraded!\n";
+            cout << "Defensive Stance upgraded!\n";
+             cout << "Counter Slash upgraded!\n";
+                                    
+                
+            }
+            else
+            {
+                cout << "Insufficient experience points to upgrade.\n";
+            }
+    }
+    else if (upgradeChoice == 'n' || upgradeChoice == 'N')
+    {
+        cout << "You choose to not upgrade your hero";
+        OPT.noupgrade = 1;
+    }
+
+}
+void warrior_level_2()
+{
+    // Initialize options for hero/villain
+    Options heroOpt, villainOpt;
+
+    // Seed for random number generation
+    srand(static_cast<unsigned int>(time(0)));
+
+    // Initialize hero and villain health
+    int heroHealth = 100;
+    int villainHealth = 100;
+
+    // Counter for hero and villain damage dealt or received
+    int heroDamageCounter = 0;
+    int villainDamageCounter = 0;
+
+    // Flag to check if special abilities are unlocked
+    bool heroSpecialUnlocked = false;
+    bool villainSpecialUnlocked = false;
+
+    // Main quest loop
+    while (true)
+    {
+        // Hero's turn
+        heroOpt.option = rand() % 5 + 1; // Randomly choose an option for the hero
+        cout << "\n============================\n";
+        cout << endl
+            << endl;
+
+        cout << "Press Enter to continue..." << endl;
+        cin.get();
+        if (heroOpt.option == 5 && heroDamageCounter >= 4)
+        {
+            // Unlock and use the special ability
+            heroSpecialUnlocked = true;
+            heroDamageCounter = 0; // Reset the counter
+            villainHealth -= 7;    // Deal 7 points of damage to the villain
+            cout << "Hero uses Warrior's Valor! Deals a powerful blow to the villain.\n";
+        }
+
+        else
+        {
+            // Use a regular attack
+            switch (heroOpt.option)
+            {
+            case 1:
+                villainHealth -= 6; // Mighty Strike
+                cout << "Hero uses Mighty Strike. Deals 6 points of damage to the villain.\n";
+                character.experience_points = character.experience_points + 4;
+                break;
+            case 2:
+                // Shield Block reduces received damage by 2
+                villainHealth -= (villainOpt.option == 3) ? 0 : 2;
+                std::cout << "Hero uses Shield Block. Reduces incoming damage.\n";
+                character.experience_points = character.experience_points + 3;
+                heroHealth = heroHealth + 2;
+                break;
+            case 3:
+                villainOpt.option -= 1; // Battle Roar reduces villain's attack
+                cout << "Hero uses Battle Roar. Reduces villain's attack.\n";
+                character.experience_points = character.experience_points + 4;
+                break;
+            case 4:
+                // Defensive Stance reduces received damage by 3
+                villainHealth -= (villainOpt.option == 6) ? 0 : 3;
+                cout << "Hero uses Defensive Stance. Reduces incoming damage.\n";
+                character.experience_points = character.experience_points + 5;
+                break;
+            default:
+                villainHealth -= 5; // Counter Slash
+                cout << "Hero uses Counter Slash. Deals 5 points of damage to the villain.\n";
+                character.experience_points = character.experience_points + 3;
+                break;
+            }
+        }
+        // Check if villain is defeated
+        if (villainHealth <= 0)
+        {
+            std::cout << "Hero defeats the villain! Congratulations!\n";
+            break;
+        }
+
+        cout << "\n============================\n";
+        cout << endl
+            << endl;
+
+        cout << "Press Enter to continue...";
+        cin.get();
+        // Villain's turn
+        villainOpt.option = rand() % 7 + 1; // Randomly choose an option for the villain
+
+        if (villainOpt.option == 7 && villainDamageCounter >= 4)
+        {
+            // Unlock and use the special ability
+            villainSpecialUnlocked = true;
+            villainDamageCounter = 0; // Reset the counter
+            heroHealth -= 8;          // Deal 8 points of damage to the hero
+            cout << "Villain uses Quantum Annihilation! Deals a massive blow to the hero.\n";
+            // Disable one random regular attack for the hero for the next turn
+            int disabledAttack = rand() % 5 + 1;
+            cout << "One of hero's regular attacks is disabled for the next turn.\n";
+            switch (disabledAttack)
+            {
+            case 1:
+                cout << "Mighty Strike is disabled.\n";
+                break;
+            case 2:
+                cout << "Shield Block is disabled.\n";
+                break;
+            case 3:
+                cout << "Battle Roar is disabled.\n";
+                break;
+            case 4:
+                cout << "Defensive Stance is disabled.\n";
+                break;
+            default:
+                cout << "Counter Slash is disabled.\n";
+                break;
+            }
+        }
+        else
+        {
+            // Use a regular attack
+            switch (villainOpt.option)
+            {
+            case 1:
+                heroHealth -= 5; // Quantum Slash
+                cout << "Villain uses Quantum Slash. Deals 8 points of damage to the hero.\n";
+                break;
+            case 2:
+                // Temporal Distortion Wave reduces hero's accuracy by 2
+                heroOpt.option -= 6;
+                cout << "Villain uses Temporal Distortion Wave. Reduces hero's accuracy.\n";
+                break;
+            case 3:
+                heroHealth -= 7; // Dark Matter Implosion
+                cout << "Villain uses Dark Matter Implosion. Deals 6 points of damage to the hero.\n";
+                break;
+            case 4:
+                heroHealth -= 3; // Plasma Nova Burst
+                cout << "Villain uses Plasma Nova Burst. Deals 6 points of damage to the hero.\n";
+                break;
+            case 5:
+                heroHealth -= 5; // Reality Rift Tear
+                cout << "Villain uses Reality Rift Tear. Deals 6 points of damage to the hero.\n";
+                break;
+            case 6:
+                // Energy Absorption Field reduces damage received by 3
+                heroHealth -= 2;
+                cout << "Villain uses Energy Absorption Field. Reduces incoming damage.\n";
+                break;
+            default:
+                heroOpt.option -= 1; // Defensive Matrix reduces hero's attack by 2
+                cout << "Villain uses Defensive Matrix. Temporarily disrupts hero's accuracy.\n";
+                break;
+            }
+        }
+
+        // Check if hero is defeated
+        if (heroHealth <= 0)
+        {
+            cout << "Hero is defeated! Game over.\n";
+            OPT.gameover1 = 1;
+            break;
+        }
+
+        // Increment damage counters
+        heroDamageCounter++;
+        villainDamageCounter++;
+
+        // Display health status
+        cout << endl;
+        cout << "Hero's Health: " << heroHealth << " | Villain's Health: " << villainHealth << " | Experience points: " << character.experience_points << endl;
+
+        // Check if special abilities are unlocked and reset the counters
+        if (heroSpecialUnlocked)
+        {
+            heroSpecialUnlocked = false;
+            heroDamageCounter = 0;
+        }
+
+        if (villainSpecialUnlocked)
+        {
+            villainSpecialUnlocked = false;
+            villainDamageCounter = 0;
+        }
+    }
+}
+void upgrade_warrior_level_2()
+{
+    // Initialize options for hero/villain
+    Options heroOpt, villainOpt;
+
+    // Seed for random number generation
+    srand(static_cast<unsigned int>(time(0)));
+
+    // Initialize hero and villain health
+    int heroHealth = 100;
+    int villainHealth = 100;
+
+    // Counter for hero and villain damage dealt or received
+    int heroDamageCounter = 0;
+    int villainDamageCounter = 0;
+
+    // Flag to check if special abilities are unlocked
+    bool heroSpecialUnlocked = false;
+    bool villainSpecialUnlocked = false;
+    cout << "Hero is upgraded.";
+    // Main quest loop
+    while (true)
+    {
+        // Hero's turn
+        heroOpt.option = rand() % 5 + 1; // Randomly choose an option for the hero
+        cout << "\n============================\n";
+        cout << endl
+            << endl;
+
+        cout << "Press Enter to continue..." << endl;
+        cin.get();
+        if (heroOpt.option == 5 && heroDamageCounter >= 4)
+        {
+            // Unlock and use the special ability
+            heroSpecialUnlocked = true;
+            heroDamageCounter = 0; // Reset the counter
+            villainHealth -= 9;    // Deal 7 points of damage to the villain
+            cout << "Hero uses Warrior's Valor! Deals a powerful blow to the villain.\n";
+        }
+
+        else
+        {
+            // Use a regular attack
+            switch (heroOpt.option)
+            {
+            case 1:
+                villainHealth -= 8; // Mighty Strike
+                cout << "Hero uses Mighty Strike (Upgraded). Deals 8 points of damage to the villain.\n";
+                character.experience_points = character.experience_points + 4;
+                break;
+            case 2:
+                // Shield Block reduces received damage by 2
+                villainHealth -= (villainOpt.option == 5) ? 0 : 2;
+                std::cout << "Hero uses Shield Block (Upgraded). Reduces incoming damage.\n";
+                character.experience_points = character.experience_points + 3;
+                heroHealth = heroHealth + 2;
+                break;
+            case 3:
+                villainOpt.option -= 1; // Battle Roar reduces villain's attack
+                cout << "Hero uses Battle Roar (Upgraded). Reduces villain's attack.\n";
+                character.experience_points = character.experience_points + 4;
+                break;
+            case 4:
+                // Defensive Stance reduces received damage by 3
+                villainHealth -= (villainOpt.option == 8) ? 0 : 3;
+                cout << "Hero uses Defensive Stance (Upgraded). Reduces incoming damage.\n";
+                character.experience_points = character.experience_points + 5;
+                break;
+            default:
+                villainHealth -= 7; // Counter Slash
+                cout << "Hero uses Counter Slash (Upgraded). Deals 7 points of damage to the villain.\n";
+                character.experience_points = character.experience_points + 3;
+                break;
+            }
+        }
+        // Check if villain is defeated
+        if (villainHealth <= 0)
+        {
+            std::cout << "Hero defeats the villain! Congratulations!\n";
+            break;
+        }
+
+        cout << "\n============================\n";
+        cout << endl
+            << endl;
+
+        cout << "Press Enter to continue...";
+        cin.get();
+        // Villain's turn
+        villainOpt.option = rand() % 7 + 1; // Randomly choose an option for the villain
+
+        if (villainOpt.option == 7 && villainDamageCounter >= 4)
+        {
+            // Unlock and use the special ability
+            villainSpecialUnlocked = true;
+            villainDamageCounter = 0; // Reset the counter
+            heroHealth -= 8;          // Deal 8 points of damage to the hero
+            cout << "Villain uses Quantum Annihilation! Deals a massive blow to the hero.\n";
+            // Disable one random regular attack for the hero for the next turn
+            int disabledAttack = rand() % 5 + 1;
+            cout << "One of hero's regular attacks is disabled for the next turn.\n";
+            switch (disabledAttack)
+            {
+            case 1:
+                cout << "Mighty Strike is disabled.\n";
+                break;
+            case 2:
+                cout << "Shield Block is disabled.\n";
+                break;
+            case 3:
+                cout << "Battle Roar is disabled.\n";
+                break;
+            case 4:
+                cout << "Defensive Stance is disabled.\n";
+                break;
+            default:
+                cout << "Counter Slash is disabled.\n";
+                break;
+            }
+        }
+        else
+        {
+            // Use a regular attack
+            switch (villainOpt.option)
+            {
+            case 1:
+                heroHealth -= 5; // Quantum Slash
+                cout << "Villain uses Quantum Slash. Deals 8 points of damage to the hero.\n";
+                break;
+            case 2:
+                // Temporal Distortion Wave reduces hero's accuracy by 2
+                heroOpt.option -= 6;
+                cout << "Villain uses Temporal Distortion Wave. Reduces hero's accuracy.\n";
+                break;
+            case 3:
+                heroHealth -= 7; // Dark Matter Implosion
+                cout << "Villain uses Dark Matter Implosion. Deals 6 points of damage to the hero.\n";
+                break;
+            case 4:
+                heroHealth -= 3; // Plasma Nova Burst
+                cout << "Villain uses Plasma Nova Burst. Deals 6 points of damage to the hero.\n";
+                break;
+            case 5:
+                heroHealth -= 5; // Reality Rift Tear
+                cout << "Villain uses Reality Rift Tear. Deals 6 points of damage to the hero.\n";
+                break;
+            case 6:
+                // Energy Absorption Field reduces damage received by 3
+                heroHealth -= 2;
+                cout << "Villain uses Energy Absorption Field. Reduces incoming damage.\n";
+                break;
+            default:
+                heroOpt.option -= 1; // Defensive Matrix reduces hero's attack by 2
+                cout << "Villain uses Defensive Matrix. Temporarily disrupts hero's accuracy.\n";
+                break;
+            }
+        }
+
+        // Check if hero is defeated
+        if (heroHealth <= 0)
+        {
+            cout << "Hero is defeated! Game over.\n";
+            OPT.gameover1 = 1;
+            break;
+        }
+
+        // Increment damage counters
+        heroDamageCounter++;
+        villainDamageCounter++;
+
+        // Display health status
+        cout << endl;
+        cout << "Hero's Health: " << heroHealth << " | Villain's Health: " << villainHealth << " | Experience points: " << character.experience_points << endl;
+
+        // Check if special abilities are unlocked and reset the counters
+        if (heroSpecialUnlocked)
+        {
+            heroSpecialUnlocked = false;
+            heroDamageCounter = 0;
+        }
+
+        if (villainSpecialUnlocked)
+        {
+            villainSpecialUnlocked = false;
+            villainDamageCounter = 0;
+        }
+    }
+}
+
+void heroupgrade_level3()
+{
+    cout << "Do you want to upgrade your hero's abilities using experience points? (y/n): ";
+    char upgradeChoice;
+    cin >> upgradeChoice;
+
+    if (upgradeChoice == 'y' || upgradeChoice == 'Y')
+    {
+        int upgradeCost = 100;
+
+        // Display current abilities and prompt user for upgrade
+        cout << "\nCurrent Hero Abilities:\n";
+        cout << "1. Mighty Strike\n";
+        cout << "2. Shield Block\n";
+        cout << "3. Battle Roar\n";
+        cout << "4. Defensive Stance\n";
+        cout << "5. Counter Slash\n";
+
+        // Deduct experience points and upgrade the chosen ability
+         // Adjust the cost as needed
+        if (character.experience_points >= upgradeCost)
+        {
+            character.experience_points -= upgradeCost;
+            cout << "Hero upgrades ability " << ".\n";
+            cout << "Mighty Strike upgraded!\n";
+            cout << "Shield Block upgraded!\n";
+            cout << "Battle Roar upgraded!\n";
+            cout << "Defensive Stance upgraded!\n";
+            cout << "Counter Slash upgraded!\n";
+
+
+        }
+        else
+        {
+            cout << "Insufficient experience points to upgrade.\n";
+        }
+    }
+    else if (upgradeChoice == 'n' || upgradeChoice == 'N')
+    {
+        cout << "You choose to not upgrade your hero";
+        OPT.noupgrade1 = 1;
+    }
+
+}
+void warrior_level_3()
+{
+    // Initialize options for hero/villain
+    Options heroOpt, villainOpt;
+
+    // Seed for random number generation
+    srand(static_cast<unsigned int>(time(0)));
+
+    // Initialize hero and villain health
+    int heroHealth = 100;
+    int villainHealth = 100;
+
+    // Counter for hero and villain damage dealt or received
+    int heroDamageCounter = 0;
+    int villainDamageCounter = 0;
+
+    // Flag to check if special abilities are unlocked
+    bool heroSpecialUnlocked = false;
+    bool villainSpecialUnlocked = false;
+
+    // Main quest loop
+    while (true)
+    {
+        // Hero's turn
+        heroOpt.option = rand() % 5 + 1; // Randomly choose an option for the hero
+        cout << "\n============================\n";
+        cout << endl
+            << endl;
+
+        cout << "Press Enter to continue..." << endl;
+        cin.get();
+        if (heroOpt.option == 5 && heroDamageCounter >= 4)
+        {
+            // Unlock and use the special ability
+            heroSpecialUnlocked = true;
+            heroDamageCounter = 0; // Reset the counter
+            villainHealth -= 7;    // Deal 7 points of damage to the villain
+            cout << "Hero uses Warrior's Valor! Deals a powerful blow to the villain.\n";
+        }
+
+        else
+        {
+            // Use a regular attack
+            switch (heroOpt.option)
+            {
+            case 1:
+                villainHealth -= 6; // Mighty Strike
+                cout << "Hero uses Mighty Strike. Deals 6 points of damage to the villain.\n";
+                character.experience_points = character.experience_points + 5;
+                break;
+            case 2:
+                // Shield Block reduces received damage by 2
+                villainHealth -= (villainOpt.option == 3) ? 0 : 2;
+                std::cout << "Hero uses Shield Block. Reduces incoming damage.\n";
+                character.experience_points = character.experience_points + 4;
+                heroHealth = heroHealth + 2;
+                break;
+            case 3:
+                villainOpt.option -= 1; // Battle Roar reduces villain's attack
+                cout << "Hero uses Battle Roar. Reduces villain's attack.\n";
+                character.experience_points = character.experience_points + 5;
+                break;
+            case 4:
+                // Defensive Stance reduces received damage by 3
+                villainHealth -= (villainOpt.option == 6) ? 0 : 3;
+                cout << "Hero uses Defensive Stance. Reduces incoming damage.\n";
+                character.experience_points = character.experience_points + 6;
+                break;
+            default:
+                villainHealth -= 5; // Counter Slash
+                cout << "Hero uses Counter Slash. Deals 5 points of damage to the villain.\n";
+                character.experience_points = character.experience_points + 4;
+                break;
+            }
+        }
+        // Check if villain is defeated
+        if (villainHealth <= 0)
+        {
+            std::cout << "Hero defeats the villain! Congratulations!\n";
+            break;
+        }
+
+        cout << "\n============================\n";
+        cout << endl
+            << endl;
+
+        cout << "Press Enter to continue...";
+        cin.get();
+        // Villain's turn
+        villainOpt.option = rand() % 6 + 1; // Randomly choose an option for the villain
+
+        if (villainOpt.option == 6 && villainDamageCounter >= 4)
+        {
+            // Unlock and use the special ability
+            villainSpecialUnlocked = true;
+            villainDamageCounter = 0; // Reset the counter
+            heroHealth -= 8;         // Deal 8 points of damage to the hero
+            cout << "Villain uses Quantum Cataclysmic Annihilation! Unleashes a series of devastating attacks.\n";
+        }
+        else
+        {
+            // Use a regular attack
+            switch (villainOpt.option)
+            {
+            case 1:
+                heroHealth -= 8; // Quantum Annihilation Slash
+                cout << "Villain uses Quantum Annihilation Slash. Deals 8 points of damage to the hero.\n";
+                break;
+            case 2:
+                // Temporal Vortex Wavefront reduces hero's accuracy
+                heroOpt.option -= 3;
+                cout << "Villain uses Temporal Vortex Wavefront. Temporarily disrupts hero's accuracy.\n";
+                break;
+            case 3:
+                // Dark Singularity Implosion reduces hero's defenses
+                heroHealth -= 7;
+                cout << "Villain uses Dark Singularity Implosion. Deals 7 points of damage and weakens hero's defenses.\n";
+                break;
+            case 4:
+                heroHealth -= 7; // Plasma Surge Cataclysm
+                cout << "Villain uses Plasma Surge Cataclysm. Deals 7 points of damage to the hero.\n";
+                break;
+            case 5:
+                // Reality Rift Tearstorm reduces hero's accuracy
+                heroOpt.option -= 2;
+                heroHealth -= 7; // Reality Rift Tearstorm
+                cout << "Villain uses Reality Rift Tearstorm. Deals 7 points of damage and disorients the hero.\n";
+                break;
+            default:
+                // Quantum Energy Drain Field reduces the hero's next attack damage by half
+                heroDamageCounter = 0;
+                cout << "Villain uses Quantum Energy Drain Field. Reduces incoming damage significantly.\n";
+                villainHealth = villainHealth + 4;
+                break;
+            }
+        }
+
+        // Check if hero is defeated
+        if (heroHealth <= 0)
+        {
+            cout << "Hero is defeated! Game over.\n";
+
+            break;
+        }
+
+        // Increment damage counters
+        heroDamageCounter++;
+        villainDamageCounter++;
+
+        // Display health status
+        cout << endl;
+        cout << "Hero's Health: " << heroHealth << " | Villain's Health: " << villainHealth << " | Experience points: " << character.experience_points << endl;
+
+        // Check if special abilities are unlocked and reset the counters
+        if (heroSpecialUnlocked)
+        {
+            heroSpecialUnlocked = false;
+            heroDamageCounter = 0;
+        }
+
+        if (villainSpecialUnlocked)
+        {
+            villainSpecialUnlocked = false;
+            villainDamageCounter = 0;
+        }
+    }
+}
+void heroupgraded_warrior_level_3()
+{
+    // Initialize options for hero/villain
+    Options heroOpt, villainOpt;
+
+    // Seed for random number generation
+    srand(static_cast<unsigned int>(time(0)));
+
+    // Initialize hero and villain health
+    int heroHealth = 100;
+    int villainHealth = 100;
+
+    // Counter for hero and villain damage dealt or received
+    int heroDamageCounter = 0;
+    int villainDamageCounter = 0;
+
+    // Flag to check if special abilities are unlocked
+    bool heroSpecialUnlocked = false;
+    bool villainSpecialUnlocked = false;
+    cout << "Level  3.";
+    // Main quest loop
+    while (true)
+    {
+        // Hero's turn
+        heroOpt.option = rand() % 5 + 1; // Randomly choose an option for the hero
+        cout << "\n============================\n";
+        cout << endl
+            << endl;
+
+        cout << "Press Enter to continue..." << endl;
+        cin.get();
+        if (heroOpt.option == 5 && heroDamageCounter >= 4)
+        {
+            // Unlock and use the special ability
+            heroSpecialUnlocked = true;
+            heroDamageCounter = 0; // Reset the counter
+            villainHealth -= 7;    // Deal 7 points of damage to the villain
+            cout << "Hero uses (Upgraded) Warrior's Valor! Deals a powerful blow to the villain.\n";
+        }
+
+        else
+        {
+            // Use a regular attack
+            switch (heroOpt.option)
+            {
+            case 1:
+                villainHealth -= 6; // Mighty Strike
+                cout << "Hero uses Mighty Strike (Upgraded). Deals 6 points of damage to the villain.\n";
+                character.experience_points = character.experience_points + 4;
+                break;
+            case 2:
+                // Shield Block reduces received damage by 2
+                villainHealth -= (villainOpt.option == 3) ? 0 : 2;
+                std::cout << "Hero uses Shield Block (Upgraded). Reduces incoming damage.\n";
+                character.experience_points = character.experience_points + 3;
+                heroHealth = heroHealth + 2;
+                break;
+            case 3:
+                villainOpt.option -= 1; // Battle Roar reduces villain's attack
+                cout << "Hero uses Battle Roar (Upgraded). Reduces villain's attack.\n";
+                character.experience_points = character.experience_points + 4;
+                break;
+            case 4:
+                // Defensive Stance reduces received damage by 3
+                villainHealth -= (villainOpt.option == 6) ? 0 : 3;
+                cout << "Hero uses Defensive Stance (Upgraded). Reduces incoming damage.\n";
+                character.experience_points = character.experience_points + 5;
+                break;
+            default:
+                villainHealth -= 5; // Counter Slash
+                cout << "Hero uses Counter Slash (Upgraded). Deals 5 points of damage to the villain.\n";
+                character.experience_points = character.experience_points + 3;
+                break;
+            }
+        }
+        // Check if villain is defeated
+        if (villainHealth <= 0)
+        {
+            std::cout << "Hero defeats the villain! Congratulations!\n";
+            break;
+        }
+
+        cout << "\n============================\n";
+        cout << endl
+            << endl;
+
+        cout << "Press Enter to continue...";
+        cin.get();
+        // Villain's turn
+        villainOpt.option = rand() % 6 + 1; // Randomly choose an option for the villain
+
+        if (villainOpt.option == 6 && villainDamageCounter >= 4)
+        {
+            // Unlock and use the special ability
+            villainSpecialUnlocked = true;
+            villainDamageCounter = 0; // Reset the counter
+            heroHealth -= 8;         // Deal 8 points of damage to the hero
+            cout << "Villain uses Quantum Cataclysmic Annihilation! Unleashes a series of devastating attacks.\n";
+        }
+        else
+        {
+            // Use a regular attack
+            switch (villainOpt.option)
+            {
+            case 1:
+                heroHealth -= 8; // Quantum Annihilation Slash
+                cout << "Villain uses Quantum Annihilation Slash. Deals 8 points of damage to the hero.\n";
+                break;
+            case 2:
+                // Temporal Vortex Wavefront reduces hero's accuracy
+                heroOpt.option -= 3;
+                cout << "Villain uses Temporal Vortex Wavefront. Temporarily disrupts hero's accuracy.\n";
+                break;
+            case 3:
+                // Dark Singularity Implosion reduces hero's defenses
+                heroHealth -= 7;
+                cout << "Villain uses Dark Singularity Implosion. Deals 7 points of damage and weakens hero's defenses.\n";
+                break;
+            case 4:
+                heroHealth -= 7; // Plasma Surge Cataclysm
+                cout << "Villain uses Plasma Surge Cataclysm. Deals 7 points of damage to the hero.\n";
+                break;
+            case 5:
+                // Reality Rift Tearstorm reduces hero's accuracy
+                heroOpt.option -= 2;
+                heroHealth -= 7; // Reality Rift Tearstorm
+                cout << "Villain uses Reality Rift Tearstorm. Deals 7 points of damage and disorients the hero.\n";
+                break;
+            default:
+                // Quantum Energy Drain Field reduces the hero's next attack damage by half
+                heroDamageCounter = 0;
+                cout << "Villain uses Quantum Energy Drain Field. Reduces incoming damage significantly.\n";
+                villainHealth = villainHealth + 4;
+                break;
+            }
+        }
+
+        // Check if hero is defeated
+        if (heroHealth <= 0)
+        {
+            cout << "Hero is defeated! Game over.\n";
+
+            break;
+        }
+
+        // Increment damage counters
+        heroDamageCounter++;
+        villainDamageCounter++;
+
+        // Display health status
+        cout << endl;
+        cout << "Hero's Health: " << heroHealth << " | Villain's Health: " << villainHealth << " | Experience points: " << character.experience_points << endl;
+
+        // Check if special abilities are unlocked and reset the counters
+        if (heroSpecialUnlocked)
+        {
+            heroSpecialUnlocked = false;
+            heroDamageCounter = 0;
+        }
+
+        if (villainSpecialUnlocked)
+        {
+            villainSpecialUnlocked = false;
+            villainDamageCounter = 0;
+        }
+    }
+}
+
+
+
+void rogue_level_1()
+{
+    // Initialize options for hero/villain
+    Options heroOpt, villainOpt;
+
+    // Seed for random number generation
+    srand(static_cast<unsigned int>(time(0)));
+
+    // Initialize hero and villain health
+    int heroHealth = 100;
+    int villainHealth = 100;
+
+    // Counter for hero and villain damage dealt or received
+    int heroDamageCounter = 0;
+    int villainDamageCounter = 0;
+
+    // Flag to check if special abilities are unlocked
+    bool heroSpecialUnlocked = false;
+    bool villainSpecialUnlocked = false;
+
+    // Main quest loop
+    while (true) {
+        // Hero's turn
+        heroOpt.option = rand() % 5 + 1; // Randomly choose an option for the hero
+        cout << "\n============================\n";
+        cout << endl << endl;
+
+        cout << "Press Enter to continue..." << endl;
+        cin.get();
+
+        if (heroOpt.option == 5 && heroDamageCounter >= 4) {
+            // Unlock and use the special ability
+            heroSpecialUnlocked = true;
+            heroDamageCounter = 0; // Reset the counter
+            villainHealth -= 6; // Deal 6 points of damage to the villain
+            cout << "Hero uses Vanishing Strike! Deals a powerful blow to the villain and disappears from sight.\n";
+            character.experience_points = character.experience_points + 4;
+        }
+        else {
+            // Use a regular attack
+            switch (heroOpt.option) {
+            case 1:
+                villainHealth -= 4; // Shadow Slash
+                cout << "Hero uses Shadow Slash. Deals 4 points of damage to the villain.\n";
+                character.experience_points = character.experience_points + 3;
+                break;
+            case 2:
+                // Smoke Screen reduces villain's accuracy by 2 for 2 turns
+                villainOpt.option -= (villainOpt.option == 7) ? 0 : 2;
+                std::cout << "Hero uses Smoke Screen. Reduces villain's accuracy.\n";
+                character.experience_points = character.experience_points + 3;
+                break;
+            case 3:
+                villainHealth -= 5; // Backstab Maneuver
+                cout << "Hero uses Backstab Maneuver. Deals 5 points of damage to the villain.\n";
+                character.experience_points = character.experience_points + 4;
+                break;
+            case 4:
+                // Evasion Stance reduces received damage by 3
+                villainHealth -= (villainOpt.option == 6) ? 0 : 3;
+                cout << "Hero uses Evasion Stance. Reduces incoming damage.\n";
+                character.experience_points = character.experience_points + 4;
+                heroHealth += 3; // Heal hero by 3 points
+                break;
+            default:
+                villainHealth -= 3; // Cloak of Shadows
+                cout << "Hero uses Cloak of Shadows. Temporarily disappears from sight.\n";
+                character.experience_points = character.experience_points + 3;
+                break;
+            }
+        }
+
+        // Check if villain is defeated
+        if (villainHealth <= 0) {
+            std::cout << "Hero defeats the villain! Congratulations!\n";
+            break;
+        }
+
+        cout << "\n============================\n";
+        cout << endl << endl;
+
+        cout << "Press Enter to continue...";
+        cin.get();
+
+        // Villain's turn
+        villainOpt.option = rand() % 7 + 1; // Randomly choose an option for the villain
+
+        if (villainOpt.option == 7 && villainDamageCounter >= 4) {
+            // Unlock and use the special ability
+            villainSpecialUnlocked = true;
+            villainDamageCounter = 0; // Reset the counter
+            heroHealth -= 8; // Deal 8 points of damage to the hero
+            cout << "Villain uses Cybernetic Overload! Deals a massive blow to the hero.\n";
+        }
+        else {
+            // Use a regular attack
+            switch (villainOpt.option) {
+            case 1:
+                heroHealth -= 3; // Electric Surge
+                cout << "Villain uses Electric Surge. Deals 3 points of damage to the hero.\n";
+                break;
+            case 2:
+                heroHealth -= 4; // Toxic Spit
+                cout << "Villain uses Toxic Spit. Deals 4 points of damage to the hero.\n";
+                break;
+            case 3:
+                heroHealth -= 5; // Mechanical Slam
+                cout << "Villain uses Mechanical Slam. Deals 5 points of damage to the hero.\n";
+                break;
+            case 4:
+                heroOpt.option -= 1; // Disruptor Beam reduces hero's accuracy
+                cout << "Villain uses Disruptor Beam. Temporarily disrupts hero's accuracy.\n";
+                break;
+            case 5:
+                heroHealth -= 3; // Nano Swarm
+                cout << "Villain uses Nano Swarm. Deals 3 points of damage to the hero.\n";
+                break;
+            case 6:
+                heroOpt.option -= 2; // Energy Pulse reduces hero's defenses
+                cout << "Villain uses Energy Pulse. Weakens hero's defenses.\n";
+                break;
+            default:
+                heroDamageCounter = 0; // Defensive Matrix reduces damage received by 2
+                cout << "Villain uses Defensive Matrix. Reduces incoming damage.\n";
+                villainHealth += 2; // Heal villain by 2 points
+                break;
+            }
+        }
+
+        // Check if hero is defeated
+        if (heroHealth <= 0) {
+            cout << "Hero is defeated! Game over.\n";
+            OPT.gameover = 1;
+            break;
+        }
+
+        // Increment damage counters
+        heroDamageCounter++;
+        villainDamageCounter++;
+
+        // Display health status
+        cout << endl;
+        cout << "Hero's Health: " << heroHealth << " | Villain's Health: " << villainHealth << " | Experience points: " << character.experience_points << endl;
+
+        // Check if special abilities are unlocked and reset the counters
+        if (heroSpecialUnlocked) {
+            heroSpecialUnlocked = false;
+            heroDamageCounter = 0;
+        }
+
+        if (villainSpecialUnlocked) {
+            villainSpecialUnlocked = false;
+            villainDamageCounter = 0;
+        }
+    }
+}
+void rogueUpgrade()
+{
+    cout << "Do you want to upgrade your rogue's abilities using experience points? (y/n): ";
+    char upgradeChoice;
+    cin >> upgradeChoice;
+
+    if (upgradeChoice == 'y' || upgradeChoice == 'Y')
+    {
+        int upgradeCost = 100;
+
+        // Display current abilities and prompt user for upgrade
+        cout << "\nCurrent Rogue Abilities:\n";
+        cout << "1. Shadow Slash\n";
+        cout << "2. Smoke Screen\n";
+        cout << "3. Backstab Maneuver\n";
+        cout << "4. Evasion Stance\n";
+        cout << "5. Cloak of Shadows\n";
+
+        // Deduct experience points and upgrade the chosen ability
+ // Adjust the cost and effects as needed
+        if (character.experience_points >= upgradeCost)
+        {
+            character.experience_points -= upgradeCost;
+            cout << "Rogue upgrades ability ";
+
+
+            cout << "Shadow Slash upgraded!\n";
+
+             cout << "Smoke Screen upgraded!\n";
+
+              cout << "Backstab Maneuver upgraded!\n";
+
+            cout << "Evasion Stance upgraded!\n";
+
+            cout << "Cloak of Shadows upgraded!\n";
+
+        }
+        else
+        {
+            cout << "Insufficient experience points to upgrade.\n";
+        }
+    }
+    else if (upgradeChoice == 'n' || upgradeChoice == 'N')
+    {
+        cout << "You choose to not upgrade your hero";
+        OPT.noupgrade = 1;
+    }
+   
+}
+
+void rogue_level_2()
+{
+    // Initialize options for hero/villain
+    Options heroOpt, villainOpt;
+
+    // Seed for random number generation
+    srand(static_cast<unsigned int>(time(0)));
+
+    // Initialize hero and villain health
+    int heroHealth = 100;
+    int villainHealth = 100;
+
+    // Counter for hero and villain damage dealt or received
+    int heroDamageCounter = 0;
+    int villainDamageCounter = 0;
+
+    // Flag to check if special abilities are unlocked
+    bool heroSpecialUnlocked = false;
+    bool villainSpecialUnlocked = false;
+
+    // Main quest loop
+    while (true)
+    {
+
+        // Hero's turn
+        heroOpt.option = rand() % 5 + 1; // Randomly choose an option for the hero
+        cout << "\n============================\n";
+        cout << endl << endl;
+
+        cout << "Press Enter to continue..." << endl;
+        cin.get();
+
+        if (heroOpt.option == 5 && heroDamageCounter >= 4) {
+            // Unlock and use the special ability
+            heroSpecialUnlocked = true;
+            heroDamageCounter = 0; // Reset the counter
+            villainHealth -= 6; // Deal 6 points of damage to the villain
+            cout << "Hero uses Vanishing Strike! Deals a powerful blow to the villain and disappears from sight.\n";
+            character.experience_points = character.experience_points + 4;
+        }
+        else {
+            // Use a regular attack
+            switch (heroOpt.option) {
+            case 1:
+                villainHealth -= 4; // Shadow Slash
+                cout << "Hero uses Shadow Slash. Deals 4 points of damage to the villain.\n";
+                character.experience_points = character.experience_points + 3;
+                break;
+            case 2:
+                // Smoke Screen reduces villain's accuracy by 2 for 2 turns
+                villainOpt.option -= (villainOpt.option == 7) ? 0 : 2;
+                std::cout << "Hero uses Smoke Screen. Reduces villain's accuracy.\n";
+                character.experience_points = character.experience_points + 3;
+                break;
+            case 3:
+                villainHealth -= 5; // Backstab Maneuver
+                cout << "Hero uses Backstab Maneuver. Deals 5 points of damage to the villain.\n";
+                character.experience_points = character.experience_points + 4;
+                break;
+            case 4:
+                // Evasion Stance reduces received damage by 3
+                villainHealth -= (villainOpt.option == 6) ? 0 : 3;
+                cout << "Hero uses Evasion Stance. Reduces incoming damage.\n";
+                character.experience_points = character.experience_points + 4;
+                heroHealth += 3; // Heal hero by 3 points
+                break;
+            default:
+                villainHealth -= 3; // Cloak of Shadows
+                cout << "Hero uses Cloak of Shadows. Temporarily disappears from sight.\n";
+                character.experience_points = character.experience_points + 3;
+                break;
+            }
+        }
+        // Check if villain is defeated
+        if (villainHealth <= 0)
+        {
+            std::cout << "Hero defeats the villain! Congratulations!\n";
+            break;
+        }
+
+        cout << "\n============================\n";
+        cout << endl
+            << endl;
+
+        cout << "Press Enter to continue...";
+        cin.get();
+        // Villain's turn
+        villainOpt.option = rand() % 7 + 1; // Randomly choose an option for the villain
+
+        if (villainOpt.option == 7 && villainDamageCounter >= 4)
+        {
+            // Unlock and use the special ability
+            villainSpecialUnlocked = true;
+            villainDamageCounter = 0; // Reset the counter
+            heroHealth -= 8;          // Deal 8 points of damage to the hero
+            cout << "Villain uses Quantum Annihilation! Deals a massive blow to the hero.\n";
+            // Disable one random regular attack for the hero for the next turn
+            int disabledAttack = rand() % 5 + 1;
+            cout << "One of hero's regular attacks is disabled for the next turn.\n";
+            switch (disabledAttack)
+            {
+            case 1:
+                cout << "Mighty Strike is disabled.\n";
+                break;
+            case 2:
+                cout << "Shield Block is disabled.\n";
+                break;
+            case 3:
+                cout << "Battle Roar is disabled.\n";
+                break;
+            case 4:
+                cout << "Defensive Stance is disabled.\n";
+                break;
+            default:
+                cout << "Counter Slash is disabled.\n";
+                break;
+            }
+        }
+        else
+        {
+            // Use a regular attack
+            switch (villainOpt.option)
+            {
+            case 1:
+                heroHealth -= 5; // Quantum Slash
+                cout << "Villain uses Quantum Slash. Deals 8 points of damage to the hero.\n";
+                break;
+            case 2:
+                // Temporal Distortion Wave reduces hero's accuracy by 2
+                heroOpt.option -= 6;
+                cout << "Villain uses Temporal Distortion Wave. Reduces hero's accuracy.\n";
+                break;
+            case 3:
+                heroHealth -= 7; // Dark Matter Implosion
+                cout << "Villain uses Dark Matter Implosion. Deals 6 points of damage to the hero.\n";
+                break;
+            case 4:
+                heroHealth -= 3; // Plasma Nova Burst
+                cout << "Villain uses Plasma Nova Burst. Deals 6 points of damage to the hero.\n";
+                break;
+            case 5:
+                heroHealth -= 5; // Reality Rift Tear
+                cout << "Villain uses Reality Rift Tear. Deals 6 points of damage to the hero.\n";
+                break;
+            case 6:
+                // Energy Absorption Field reduces damage received by 3
+                heroHealth -= 2;
+                cout << "Villain uses Energy Absorption Field. Reduces incoming damage.\n";
+                break;
+            default:
+                heroOpt.option -= 1; // Defensive Matrix reduces hero's attack by 2
+                cout << "Villain uses Defensive Matrix. Temporarily disrupts hero's accuracy.\n";
+                break;
+            }
+        }
+
+        // Check if hero is defeated
+        if (heroHealth <= 0)
+        {
+            cout << "Hero is defeated! Game over.\n";
+            OPT.gameover1 = 1;
+            break;
+        }
+
+        // Increment damage counters
+        heroDamageCounter++;
+        villainDamageCounter++;
+
+        // Display health status
+        cout << endl;
+        cout << "Hero's Health: " << heroHealth << " | Villain's Health: " << villainHealth << " | Experience points: " << character.experience_points << endl;
+
+        // Check if special abilities are unlocked and reset the counters
+        if (heroSpecialUnlocked)
+        {
+            heroSpecialUnlocked = false;
+            heroDamageCounter = 0;
+        }
+
+        if (villainSpecialUnlocked)
+        {
+            villainSpecialUnlocked = false;
+            villainDamageCounter = 0;
+        }
+    }
+}
+void rogueupgraded_level_2()
+{
+    // Initialize options for hero/villain
+    Options heroOpt, villainOpt;
+
+    // Seed for random number generation
+    srand(static_cast<unsigned int>(time(0)));
+
+    // Initialize hero and villain health
+    int heroHealth = 100;
+    int villainHealth = 100;
+
+    // Counter for hero and villain damage dealt or received
+    int heroDamageCounter = 0;
+    int villainDamageCounter = 0;
+
+    // Flag to check if special abilities are unlocked
+    bool heroSpecialUnlocked = false;
+    bool villainSpecialUnlocked = false;
+
+    // Main quest loop
+    while (true)
+    {
+
+        // Hero's turn
+        heroOpt.option = rand() % 5 + 1; // Randomly choose an option for the hero
+        cout << "\n============================\n";
+        cout << endl << endl;
+
+        cout << "Press Enter to continue..." << endl;
+        cin.get();
+
+        if (heroOpt.option == 5 && heroDamageCounter >= 4) {
+            // Unlock and use the special ability
+            heroSpecialUnlocked = true;
+            heroDamageCounter = 0; // Reset the counter
+            villainHealth -= 6; // Deal 6 points of damage to the villain
+            cout << "Hero uses Vanishing Strike! (Upgraded). Deals a powerful blow to the villain and disappears from sight.\n";
+            character.experience_points = character.experience_points + 4;
+        }
+        else {
+            // Use a regular attack
+            switch (heroOpt.option) {
+            case 1:
+                villainHealth -= 4; // Shadow Slash
+                cout << "Hero uses Shadow Slash (Upgraded). Deals 4 points of damage to the villain.\n";
+                character.experience_points = character.experience_points + 3;
+                break;
+            case 2:
+                // Smoke Screen reduces villain's accuracy by 2 for 2 turns
+                villainOpt.option -= (villainOpt.option == 7) ? 0 : 2;
+                std::cout << "Hero uses Smoke Screen (Upgraded). Reduces villain's accuracy.\n";
+                character.experience_points = character.experience_points + 3;
+                break;
+            case 3:
+                villainHealth -= 5; // Backstab Maneuver
+                cout << "Hero uses Backstab Maneuver (Upgraded). Deals 5 points of damage to the villain.\n";
+                character.experience_points = character.experience_points + 4;
+                break;
+            case 4:
+                // Evasion Stance reduces received damage by 3
+                villainHealth -= (villainOpt.option == 6) ? 0 : 3;
+                cout << "Hero uses Evasion Stance (Upgraded). Reduces incoming damage.\n";
+                character.experience_points = character.experience_points + 4;
+                heroHealth += 3; // Heal hero by 3 points
+                break;
+            default:
+                villainHealth -= 3; // Cloak of Shadows
+                cout << "Hero uses Cloak of Shadows (Upgraded). Temporarily disappears from sight.\n";
+                character.experience_points = character.experience_points + 3;
+                break;
+            }
+        }
+        // Check if villain is defeated
+        if (villainHealth <= 0)
+        {
+            std::cout << "Hero defeats the villain! Congratulations!\n";
+            break;
+        }
+
+        cout << "\n============================\n";
+        cout << endl
+            << endl;
+
+        cout << "Press Enter to continue...";
+        cin.get();
+        // Villain's turn
+        villainOpt.option = rand() % 7 + 1; // Randomly choose an option for the villain
+
+        if (villainOpt.option == 7 && villainDamageCounter >= 4)
+        {
+            // Unlock and use the special ability
+            villainSpecialUnlocked = true;
+            villainDamageCounter = 0; // Reset the counter
+            heroHealth -= 8;          // Deal 8 points of damage to the hero
+            cout << "Villain uses Quantum Annihilation! Deals a massive blow to the hero.\n";
+            // Disable one random regular attack for the hero for the next turn
+            int disabledAttack = rand() % 5 + 1;
+            cout << "One of hero's regular attacks is disabled for the next turn.\n";
+            switch (disabledAttack)
+            {
+            case 1:
+                cout << "Mighty Strike is disabled.\n";
+                break;
+            case 2:
+                cout << "Shield Block is disabled.\n";
+                break;
+            case 3:
+                cout << "Battle Roar is disabled.\n";
+                break;
+            case 4:
+                cout << "Defensive Stance is disabled.\n";
+                break;
+            default:
+                cout << "Counter Slash is disabled.\n";
+                break;
+            }
+        }
+        else
+        {
+            // Use a regular attack
+            switch (villainOpt.option)
+            {
+            case 1:
+                heroHealth -= 5; // Quantum Slash
+                cout << "Villain uses Quantum Slash. Deals 8 points of damage to the hero.\n";
+                break;
+            case 2:
+                // Temporal Distortion Wave reduces hero's accuracy by 2
+                heroOpt.option -= 6;
+                cout << "Villain uses Temporal Distortion Wave. Reduces hero's accuracy.\n";
+                break;
+            case 3:
+                heroHealth -= 7; // Dark Matter Implosion
+                cout << "Villain uses Dark Matter Implosion. Deals 6 points of damage to the hero.\n";
+                break;
+            case 4:
+                heroHealth -= 3; // Plasma Nova Burst
+                cout << "Villain uses Plasma Nova Burst. Deals 6 points of damage to the hero.\n";
+                break;
+            case 5:
+                heroHealth -= 5; // Reality Rift Tear
+                cout << "Villain uses Reality Rift Tear. Deals 6 points of damage to the hero.\n";
+                break;
+            case 6:
+                // Energy Absorption Field reduces damage received by 3
+                heroHealth -= 2;
+                cout << "Villain uses Energy Absorption Field. Reduces incoming damage.\n";
+                break;
+            default:
+                heroOpt.option -= 1; // Defensive Matrix reduces hero's attack by 2
+                cout << "Villain uses Defensive Matrix. Temporarily disrupts hero's accuracy.\n";
+                break;
+            }
+        }
+
+        // Check if hero is defeated
+        if (heroHealth <= 0)
+        {
+            cout << "Hero is defeated! Game over.\n";
+            OPT.gameover1 = 1;
+            break;
+        }
+
+        // Increment damage counters
+        heroDamageCounter++;
+        villainDamageCounter++;
+
+        // Display health status
+        cout << endl;
+        cout << "Hero's Health: " << heroHealth << " | Villain's Health: " << villainHealth << " | Experience points: " << character.experience_points << endl;
+
+        // Check if special abilities are unlocked and reset the counters
+        if (heroSpecialUnlocked)
+        {
+            heroSpecialUnlocked = false;
+            heroDamageCounter = 0;
+        }
+
+        if (villainSpecialUnlocked)
+        {
+            villainSpecialUnlocked = false;
+            villainDamageCounter = 0;
+        }
+    }
+}
+
+
+void rogueUpgrade_level3()
+{
+    cout << "Do you want to upgrade your rogue's abilities using experience points? (y/n): ";
+    char upgradeChoice;
+    cin >> upgradeChoice;
+
+    if (upgradeChoice == 'y' || upgradeChoice == 'Y')
+    {
+        int upgradeCost = 100;
+
+        // Display current abilities and prompt user for upgrade
+        cout << "\nCurrent Rogue Abilities:\n";
+        cout << "1. Shadow Slash\n";
+        cout << "2. Smoke Screen\n";
+        cout << "3. Backstab Maneuver\n";
+        cout << "4. Evasion Stance\n";
+        cout << "5. Cloak of Shadows\n";
+
+        // Deduct experience points and upgrade the chosen ability
+ // Adjust the cost and effects as needed
+        if (character.experience_points >= upgradeCost)
+        {
+            character.experience_points -= upgradeCost;
+            cout << "Rogue upgrades ability ";
+
+
+            cout << "Shadow Slash upgraded!\n";
+
+            cout << "Smoke Screen upgraded!\n";
+
+            cout << "Backstab Maneuver upgraded!\n";
+
+            cout << "Evasion Stance upgraded!\n";
+
+            cout << "Cloak of Shadows upgraded!\n";
+
+        }
+        else
+        {
+            cout << "Insufficient experience points to upgrade.\n";
+        }
+    }
+    else if (upgradeChoice == 'n' || upgradeChoice == 'N')
+    {
+        cout << "You choose to not upgrade your hero";
+        OPT.noupgrade1 = 1;
+    }
+}
+
+
+void rogueupgraded_level_3()
+{
+    // Initialize options for hero/villain
+    Options heroOpt, villainOpt;
+
+    // Seed for random number generation
+    srand(static_cast<unsigned int>(time(0)));
+
+    // Initialize hero and villain health
+    int heroHealth = 100;
+    int villainHealth = 100;
+
+    // Counter for hero and villain damage dealt or received
+    int heroDamageCounter = 0;
+    int villainDamageCounter = 0;
+
+    // Flag to check if special abilities are unlocked
+    bool heroSpecialUnlocked = false;
+    bool villainSpecialUnlocked = false;
+    cout << "Level  3.";
+    // Main quest loop
+    while (true)
+    {
+        // Hero's turn
+        heroOpt.option = rand() % 5 + 1; // Randomly choose an option for the hero
+        cout << "\n============================\n";
+        cout << endl << endl;
+
+        cout << "Press Enter to continue..." << endl;
+        cin.get();
+
+        if (heroOpt.option == 5 && heroDamageCounter >= 4) {
+            // Unlock and use the special ability
+            heroSpecialUnlocked = true;
+            heroDamageCounter = 0; // Reset the counter
+            villainHealth -= 6; // Deal 6 points of damage to the villain
+            cout << "Hero uses Vanishing Strike! (Upgraded). Deals a powerful blow to the villain and disappears from sight.\n";
+            character.experience_points = character.experience_points + 4;
+        }
+        else {
+            // Use a regular attack
+            switch (heroOpt.option) {
+            case 1:
+                villainHealth -= 4; // Shadow Slash
+                cout << "Hero uses Shadow Slash (Upgraded). Deals 4 points of damage to the villain.\n";
+                character.experience_points = character.experience_points + 3;
+                break;
+            case 2:
+                // Smoke Screen reduces villain's accuracy by 2 for 2 turns
+                villainOpt.option -= (villainOpt.option == 7) ? 0 : 2;
+                std::cout << "Hero uses Smoke Screen (Upgraded). Reduces villain's accuracy.\n";
+                character.experience_points = character.experience_points + 3;
+                break;
+            case 3:
+                villainHealth -= 5; // Backstab Maneuver
+                cout << "Hero uses Backstab Maneuver (Upgraded). Deals 5 points of damage to the villain.\n";
+                character.experience_points = character.experience_points + 4;
+                break;
+            case 4:
+                // Evasion Stance reduces received damage by 3
+                villainHealth -= (villainOpt.option == 6) ? 0 : 3;
+                cout << "Hero uses Evasion Stance (Upgraded). Reduces incoming damage.\n";
+                character.experience_points = character.experience_points + 4;
+                heroHealth += 3; // Heal hero by 3 points
+                break;
+            default:
+                villainHealth -= 3; // Cloak of Shadows
+                cout << "Hero uses Cloak of Shadows (Upgraded). Temporarily disappears from sight.\n";
+                character.experience_points = character.experience_points + 3;
+                break;
+            }
+        }
+        // Check if villain is defeated
+        if (villainHealth <= 0)
+        {
+            std::cout << "Hero defeats the villain! Congratulations!\n";
+            break;
+        }
+
+        cout << "\n============================\n";
+        cout << endl
+            << endl;
+
+        cout << "Press Enter to continue...";
+        cin.get();
+        // Villain's turn
+        villainOpt.option = rand() % 6 + 1; // Randomly choose an option for the villain
+
+        if (villainOpt.option == 6 && villainDamageCounter >= 4)
+        {
+            // Unlock and use the special ability
+            villainSpecialUnlocked = true;
+            villainDamageCounter = 0; // Reset the counter
+            heroHealth -= 8;         // Deal 8 points of damage to the hero
+            cout << "Villain uses Quantum Cataclysmic Annihilation! Unleashes a series of devastating attacks.\n";
+        }
+        else
+        {
+            // Use a regular attack
+            switch (villainOpt.option)
+            {
+            case 1:
+                heroHealth -= 8; // Quantum Annihilation Slash
+                cout << "Villain uses Quantum Annihilation Slash. Deals 8 points of damage to the hero.\n";
+                break;
+            case 2:
+                // Temporal Vortex Wavefront reduces hero's accuracy
+                heroOpt.option -= 3;
+                cout << "Villain uses Temporal Vortex Wavefront. Temporarily disrupts hero's accuracy.\n";
+                break;
+            case 3:
+                // Dark Singularity Implosion reduces hero's defenses
+                heroHealth -= 7;
+                cout << "Villain uses Dark Singularity Implosion. Deals 7 points of damage and weakens hero's defenses.\n";
+                break;
+            case 4:
+                heroHealth -= 7; // Plasma Surge Cataclysm
+                cout << "Villain uses Plasma Surge Cataclysm. Deals 7 points of damage to the hero.\n";
+                break;
+            case 5:
+                // Reality Rift Tearstorm reduces hero's accuracy
+                heroOpt.option -= 2;
+                heroHealth -= 7; // Reality Rift Tearstorm
+                cout << "Villain uses Reality Rift Tearstorm. Deals 7 points of damage and disorients the hero.\n";
+                break;
+            default:
+                // Quantum Energy Drain Field reduces the hero's next attack damage by half
+                heroDamageCounter = 0;
+                cout << "Villain uses Quantum Energy Drain Field. Reduces incoming damage significantly.\n";
+                villainHealth = villainHealth + 4;
+                break;
+            }
+        }
+
+        // Check if hero is defeated
+        if (heroHealth <= 0)
+        {
+            cout << "Hero is defeated! Game over.\n";
+
+            break;
+        }
+
+        // Increment damage counters
+        heroDamageCounter++;
+        villainDamageCounter++;
+
+        // Display health status
+        cout << endl;
+        cout << "Hero's Health: " << heroHealth << " | Villain's Health: " << villainHealth << " | Experience points: " << character.experience_points << endl;
+
+        // Check if special abilities are unlocked and reset the counters
+        if (heroSpecialUnlocked)
+        {
+            heroSpecialUnlocked = false;
+            heroDamageCounter = 0;
+        }
+
+        if (villainSpecialUnlocked)
+        {
+            villainSpecialUnlocked = false;
+            villainDamageCounter = 0;
+        }
+    }
+}
+
+void rogue_level_3()
+{
+    // Initialize options for hero/villain
+    Options heroOpt, villainOpt;
+
+    // Seed for random number generation
+    srand(static_cast<unsigned int>(time(0)));
+
+    // Initialize hero and villain health
+    int heroHealth = 100;
+    int villainHealth = 100;
+
+    // Counter for hero and villain damage dealt or received
+    int heroDamageCounter = 0;
+    int villainDamageCounter = 0;
+
+    // Flag to check if special abilities are unlocked
+    bool heroSpecialUnlocked = false;
+    bool villainSpecialUnlocked = false;
+    cout << "Level  3.";
+    // Main quest loop
+    while (true)
+    {
+        // Hero's turn
+        heroOpt.option = rand() % 5 + 1; // Randomly choose an option for the hero
+        cout << "\n============================\n";
+        cout << endl << endl;
+
+        cout << "Press Enter to continue..." << endl;
+        cin.get();
+
+        if (heroOpt.option == 5 && heroDamageCounter >= 4) {
+            // Unlock and use the special ability
+            heroSpecialUnlocked = true;
+            heroDamageCounter = 0; // Reset the counter
+            villainHealth -= 6; // Deal 6 points of damage to the villain
+            cout << "Hero uses Vanishing Strike! Deals a powerful blow to the villain and disappears from sight.\n";
+            character.experience_points = character.experience_points + 4;
+        }
+        else {
+            // Use a regular attack
+            switch (heroOpt.option) {
+            case 1:
+                villainHealth -= 4; // Shadow Slash
+                cout << "Hero uses Shadow Slash. Deals 4 points of damage to the villain.\n";
+                character.experience_points = character.experience_points + 3;
+                break;
+            case 2:
+                // Smoke Screen reduces villain's accuracy by 2 for 2 turns
+                villainOpt.option -= (villainOpt.option == 7) ? 0 : 2;
+                std::cout << "Hero uses Smoke Screen. Reduces villain's accuracy.\n";
+                character.experience_points = character.experience_points + 3;
+                break;
+            case 3:
+                villainHealth -= 5; // Backstab Maneuver
+                cout << "Hero uses Backstab Maneuver. Deals 5 points of damage to the villain.\n";
+                character.experience_points = character.experience_points + 4;
+                break;
+            case 4:
+                // Evasion Stance reduces received damage by 3
+                villainHealth -= (villainOpt.option == 6) ? 0 : 3;
+                cout << "Hero uses Evasion Stance. Reduces incoming damage.\n";
+                character.experience_points = character.experience_points + 4;
+                heroHealth += 3; // Heal hero by 3 points
+                break;
+            default:
+                villainHealth -= 3; // Cloak of Shadows
+                cout << "Hero uses Cloak of Shadows. Temporarily disappears from sight.\n";
+                character.experience_points = character.experience_points + 3;
+                break;
+            }
+        }
+        // Check if villain is defeated
+        if (villainHealth <= 0)
+        {
+            std::cout << "Hero defeats the villain! Congratulations!\n";
+            break;
+        }
+
+        cout << "\n============================\n";
+        cout << endl
+            << endl;
+
+        cout << "Press Enter to continue...";
+        cin.get();
+        // Villain's turn
+        villainOpt.option = rand() % 6 + 1; // Randomly choose an option for the villain
+
+        if (villainOpt.option == 6 && villainDamageCounter >= 4)
+        {
+            // Unlock and use the special ability
+            villainSpecialUnlocked = true;
+            villainDamageCounter = 0; // Reset the counter
+            heroHealth -= 8;         // Deal 8 points of damage to the hero
+            cout << "Villain uses Quantum Cataclysmic Annihilation! Unleashes a series of devastating attacks.\n";
+        }
+        else
+        {
+            // Use a regular attack
+            switch (villainOpt.option)
+            {
+            case 1:
+                heroHealth -= 8; // Quantum Annihilation Slash
+                cout << "Villain uses Quantum Annihilation Slash. Deals 8 points of damage to the hero.\n";
+                break;
+            case 2:
+                // Temporal Vortex Wavefront reduces hero's accuracy
+                heroOpt.option -= 3;
+                cout << "Villain uses Temporal Vortex Wavefront. Temporarily disrupts hero's accuracy.\n";
+                break;
+            case 3:
+                // Dark Singularity Implosion reduces hero's defenses
+                heroHealth -= 7;
+                cout << "Villain uses Dark Singularity Implosion. Deals 7 points of damage and weakens hero's defenses.\n";
+                break;
+            case 4:
+                heroHealth -= 7; // Plasma Surge Cataclysm
+                cout << "Villain uses Plasma Surge Cataclysm. Deals 7 points of damage to the hero.\n";
+                break;
+            case 5:
+                // Reality Rift Tearstorm reduces hero's accuracy
+                heroOpt.option -= 2;
+                heroHealth -= 7; // Reality Rift Tearstorm
+                cout << "Villain uses Reality Rift Tearstorm. Deals 7 points of damage and disorients the hero.\n";
+                break;
+            default:
+                // Quantum Energy Drain Field reduces the hero's next attack damage by half
+                heroDamageCounter = 0;
+                cout << "Villain uses Quantum Energy Drain Field. Reduces incoming damage significantly.\n";
+                villainHealth = villainHealth + 4;
+                break;
+            }
+        }
+
+        // Check if hero is defeated
+        if (heroHealth <= 0)
+        {
+            cout << "Hero is defeated! Game over.\n";
+
+            break;
+        }
+
+        // Increment damage counters
+        heroDamageCounter++;
+        villainDamageCounter++;
+
+        // Display health status
+        cout << endl;
+        cout << "Hero's Health: " << heroHealth << " | Villain's Health: " << villainHealth << " | Experience points: " << character.experience_points << endl;
+
+        // Check if special abilities are unlocked and reset the counters
+        if (heroSpecialUnlocked)
+        {
+            heroSpecialUnlocked = false;
+            heroDamageCounter = 0;
+        }
+
+        if (villainSpecialUnlocked)
+        {
+            villainSpecialUnlocked = false;
+            villainDamageCounter = 0;
+        }
+    }
+}
+
+
+int main()
+{
+    cout << "WELCOME to 'Chronicles of Cyberia: Serenity of Elders in the Cybernetic Era.'" << endl << endl << "In the year 2126, the world is under the oppressive rule of the SUPERIORS,\n who seek to assimilate humanity into a cybernetic regime. Join our heroes: \na warrior who escaped the clutches of the SUPERIORS, \na librarian turned mage preserving ancient wisdom, \nand a rogue mastering stealth in the face of high-tech tyranny.\n As you navigate this cybernetic era, your choices will shape \nthe destiny of a world torn between ancient mysticism and technological dominance. \nAre you ready to lead the rebellion and restore freedom? \n";
+
+    CHARACTER_CREATION();
+    weapondisplay();
+    CHARACTERINFO();
+    start_the_game();
+    if (OPT.i == 1)
+    {
+
+
+        for (;;)
+        {
+            if (OPT.option == 1)
+            {
+                cout << "Your going to Experience the game." << endl << endl;
+                warrior_level_1();
+                if (OPT.gameover == 0)
+                {
+
+
+
+                    heroupgrade();
+                    for (;;)
+                    {
+                        cout << "Do you want to continue to the next battle? (y/n): ";
+                        char continueChoice;
+                        cin >> continueChoice;
+
+                        if (continueChoice == 'y' || continueChoice == 'Y')
+                        {
+                            // User chose not to continue, exit the loop
+                            if (OPT.noupgrade == 0)
+                            {
+                                upgrade_warrior_level_2();
+
+                                if (OPT.gameover1 == 0)
+                                {
+
+                                    heroupgrade_level3();
+                                    for (;;)
+                                    {
+                                        cout << "Do you want to continue to the next battle? (y/n): ";
+                                        char continueChoice1;
+                                        cin >> continueChoice1;
+                                        if (continueChoice1 == 'y' || continueChoice1 == 'Y')
+                                        {
+                                            if (OPT.noupgrade1 == 0)
+                                            {
+                                                warrior_level_3();
+                                            }
+                                            else if (OPT.noupgrade1 == 1)
+                                            {
+                                                heroupgraded_warrior_level_3();
+                                            }
+
+                                        }
+                                        else if (continueChoice1 == 'n' || continueChoice1 == 'N')
+                                        {
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            cout << "invalid input please try again.";
+                                            continue;
+                                        }
+                                    }
+                                }
+                                else if (OPT.gameover == 1)
+                                {
+                                    break;
+                                }
+                                else
+                                {
+                                    cout << "invalid input please try again.";
+                                    continue;
+                                }
+                                break;
+                            }
+                            else if (OPT.noupgrade == 1)
+                            {
+                                warrior_level_2();
+                                heroupgrade_level3();
+                                if (OPT.gameover1 == 0)
+                                {
+
+
+                                    for (;;)
+                                    {
+                                        cout << "Do you want to continue to the next battle? (y/n): ";
+                                        char continueChoice1;
+                                        cin >> continueChoice1;
+                                        if (continueChoice1 == 'y' || continueChoice1 == 'Y')
+                                        {
+                                            if (OPT.noupgrade1 == 1)
+                                            {
+                                                warrior_level_3();
+                                            }
+                                            else if (OPT.noupgrade1 == 0)
+                                            {
+                                                heroupgraded_warrior_level_3();
+                                            }
+
+                                        }
+                                        else if (continueChoice1 == 'n' || continueChoice1 == 'N')
+                                        {
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            cout << "invalid input please try again.";
+                                            continue;
+                                        }
+                                    }
+                                }
+                                else if (OPT.gameover == 1)
+                                {
+                                    break;
+                                }
+                                else
+                                {
+                                    cout << "invalid input please try again.";
+                                    continue;
+                                }
+                            }
+
+
+                        }
+                        else if (continueChoice == 'n' || continueChoice == 'N')
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            cout << "invalid input please try again.";
+                            continue;
+                        }
+                    }
+                }
+                else if (OPT.gameover == 1)
+                {
+                    break;
+                }
+
+                break;
+            }
+            else if (OPT.option == 2)
+            {
+                cout << "inventory";
+            }
+            else if (OPT.option == 3)
+            {
+                cout << "Exiting the game. Thanks for playing!" << endl;
+                break;
+
+            }
+        }
+    }
+    else if (OPT.i == 2)
+    {
+        cout << "rogue";
+        for (;;)
+        {
+            if (OPT.option == 1)
+            {
+                cout << "Your going to Experience the game." << endl << endl;
+                rogue_level_1();
+                if (OPT.gameover == 0)
+                {
+
+
+
+                    rogueUpgrade();
+
+                    for (;;)
+                    {
+                        cout << "Do you want to continue to the next battle? (y/n): ";
+                        char continueChoice;
+                        cin >> continueChoice;
+
+                        if (continueChoice == 'y' || continueChoice == 'Y')
+                        {
+                            // User chose not to continue, exit the loop
+                            if (OPT.noupgrade == 0)
+                            {
+                                rogueupgraded_level_2();
+
+
+                                if (OPT.gameover1 == 0)
+                                {
+
+                                    rogueUpgrade_level3();
+
+                                    for (;;)
+                                    {
+                                        cout << "Do you want to continue to the next battle? (y/n): ";
+                                        char continueChoice1;
+                                        cin >> continueChoice1;
+                                        if (continueChoice1 == 'y' || continueChoice1 == 'Y')
+                                        {
+                                            if (OPT.noupgrade1 == 0)
+                                            {
+                                                rogue_level_3();
+
+                                            }
+                                            else if (OPT.noupgrade1 == 1)
+                                            {
+                                                rogueupgraded_level_3();
+
+                                            }
+
+                                        }
+                                        else if (continueChoice1 == 'n' || continueChoice1 == 'N')
+                                        {
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            cout << "invalid input please try again.";
+                                            continue;
+                                        }
+                                    }
+                                }
+                                else if (OPT.gameover == 1)
+                                {
+                                    break;
+                                }
+                                else
+                                {
+                                    cout << "invalid input please try again.";
+                                    continue;
+                                }
+                                break;
+                            }
+                            else if (OPT.noupgrade == 1)
+                            {
+                                rogue_level_2();
+
+                                rogueUpgrade_level3();
+                                if (OPT.gameover1 == 0)
+                                {
+
+
+                                    for (;;)
+                                    {
+                                        cout << "Do you want to continue to the next battle? (y/n): ";
+                                        char continueChoice1;
+                                        cin >> continueChoice1;
+                                        if (continueChoice1 == 'y' || continueChoice1 == 'Y')
+                                        {
+                                            if (OPT.noupgrade1 == 1)
+                                            {
+                                                rogue_level_3();
+
+                                            }
+                                            else if (OPT.noupgrade1 == 0)
+                                            {
+                                                rogueupgraded_level_3();
+
+                                            }
+
+                                        }
+                                        else if (continueChoice1 == 'n' || continueChoice1 == 'N')
+                                        {
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            cout << "invalid input please try again.";
+                                            continue;
+                                        }
+                                    }
+                                }
+                                else if (OPT.gameover == 1)
+                                {
+                                    break;
+                                }
+                                else
+                                {
+                                    cout << "invalid input please try again.";
+                                    continue;
+                                }
+                            }
+
+
+                        }
+                        else if (continueChoice == 'n' || continueChoice == 'N')
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            cout << "invalid input please try again.";
+                            continue;
+                        }
+                    }
+                }
+                else if (OPT.gameover == 1)
+                {
+                    break;
+                }
+
+                break;
+            }
+            else if (OPT.option == 2)
+            {
+                cout << "inventory";
+            }
+            else if (OPT.option == 3)
+            {
+                cout << "Exiting the game. Thanks for playing!" << endl;
+                break;
+
+            }
+        }
+    }
+    else if (OPT.i == 3)
+    {
+        cout << "mage";
+    }
+}
